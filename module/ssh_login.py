@@ -11,7 +11,7 @@ class SshLogin:
 	password = ''
 	key = ''
 
-	def __init__(self, host, port, username, password, key):
+	def __init__(self, host, port, username, password = '', key = ''):
 		self.host = host
 		self.port = port
 		self.username = username
