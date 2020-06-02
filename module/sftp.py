@@ -10,13 +10,16 @@ class Sftp:
 	username = ''
 	password = ''
 	key = ''
+	flag = 1
 
-	def __init__(self, host, port, username, password, key):
+	def __init__(self, host, port, username, password = '', key = '', flag = 1):
 		self.host = host
 		self.port = port
 		self.username = username
 		self.password = password
 		self.key = key
+		self.flag = flag
+
 
 	# 密码登录
 	def sftpLoginPassword(self):
@@ -34,6 +37,14 @@ class Sftp:
 		sftp = paramiko.SFTPClient.from_transport(transport)
 		self.__sftp = sftp
 		self.__transport = transport
+
+	def sftpMain(self):
+		if self.flag == 1:
+			sftpLoginPassword(self)
+		elif self.flag == 2:
+			sftpLoginSecretKey(self)
+		else:
+			print("\033[0;31m%s\033[0m" % ("[!] Something Wrong!"))
 
 	# 上传功能
 	def sftpUpload(self, local_path, target_path):

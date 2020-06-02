@@ -8,23 +8,14 @@ class FileMonitor:
 
 	local_file = './fileLog.txt'
 
-	def getFileList(self, dir, loginList, loginFlag):
-		if loginFlag == 1:
-			ssh = ssh_login.SshLogin(loginList['host'], loginList['port'], loginList['username'], loginList['password'])
-			ssh.sshLoginPassword()
-			ssh.execute("ls -aln %s | stat `awk'{print $9}'` | grep -v Size | grep -v Birth | grep -v Device | grep -v Access | grep -v Change" % dir)
-			#fileWrite(ssh.__result)
-			self.__fileResult = ssh.__result
-			ssh.sshClose()
-		elif loginFlag == 2:
-			ssh = ssh_login.SshLogin(loginList['host'], loginList['port'], loginList['username'], loginList['key'])
-			ssh.sshLoginPassword()
-			ssh.execute("ls -aln %s | stat `awk'{print $9}'` | grep -v Size | grep -v Birth | grep -v Device | grep -v Access | grep -v Change" % dir)
-			#fileWrite(ssh.__result)
-			self.__fileResult = (str(ssh.__result)).split("\n") # 即时的文件名
-			ssh.sshClose()
-		else:
-			print("\033[0;31m%s\033[0m" % ("[!] Something Wrong!"))
+	def getFileList(self, dir, loginList):
+		ssh = ssh_login.SshLogin(loginList['host'], loginList['port'], loginList['username'], loginList['password'], loginList['key'],loginList['flag'])
+		ssh.loginMain()
+		ssh.execute("ls -aln %s | stat `awk'{print $9}'` | grep -v Size | grep -v Birth | grep -v Device | grep -v Access | grep -v Change" % dir)
+		#fileWrite(ssh.__result)
+		self.__fileResult = (str(ssh.__result)).split("\n")
+		ssh.sshClose()
+
 	def fileWrite(self, fileContent):
 		f = open(self.local_file, 'w')
 		f.write(fileContent)
